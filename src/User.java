@@ -4,7 +4,7 @@ import java.util.List;
 public class User {
     private String firstname;
     private String lastname;
-    private Address userAddress;
+    private List<Address> addresses;
     private List<BankAccount> bankAccounts;
 
     public User(String firstname, String lastname, Address userAddress) {
@@ -14,12 +14,13 @@ public class User {
         if (lastname == null || lastname.isEmpty()) {
             throw new IllegalArgumentException("Фамилия не может быть пустой или null");
         }
-        if (userAddress == null ) {
+        if (userAddress == null) {
             throw new IllegalArgumentException("Адрес не может быть пустым или null");
         }
         this.firstname = firstname;
         this.lastname = lastname;
-        this.userAddress = userAddress;
+        this.addresses = new ArrayList<>();
+        this.addresses.add(userAddress);
         this.bankAccounts = new ArrayList<>();
     }
 
@@ -42,11 +43,11 @@ public class User {
         if (lastname == null || lastname.isEmpty()) {
             throw new IllegalArgumentException("Фамилия не может быть пустой или null");
         }
-
         this.lastname = lastname;
     }
-    public void addBankAccount(BankAccount account){
-        if (account==null) {
+
+    public void addBankAccount(BankAccount account) {
+        if (account == null) {
             throw new IllegalArgumentException("Аккаунт не может быть пустым");
         }
         bankAccounts.add(account);
@@ -56,21 +57,29 @@ public class User {
         return bankAccounts;
     }
 
-    public Address getAddress() {
-        return userAddress;
+    public List<Address> getAddresses() {
+        return addresses;
     }
 
-    public void setAddress(Address userAddress) {
-        if (userAddress == null) {
+    public void addAddress(Address address) {
+        if (address == null) {
             throw new IllegalArgumentException("Адрес не может быть null");
         }
-        this.userAddress = userAddress;
+        addresses.add(address);
     }
 
+    public void updateAddress(Address newAddress) {
+        if (newAddress == null) {
+            throw new IllegalArgumentException("Адрес не может быть null");
+        }
+        this.addresses.add(newAddress);
+    }
 
     public String getFullName() {
-        return "Полное имя: " + this.firstname + " " + this.lastname +", Адрес: "+ userAddress.getFullAddress();
+        StringBuilder fullAddress = new StringBuilder();
+        for (Address address : addresses) {
+            fullAddress.append(address.getFullAddress()).append("; ");
+        }
+        return "Полное имя: " + this.firstname + " " + this.lastname + ", Адреса: " + fullAddress.toString();
     }
-    //
-
 }
